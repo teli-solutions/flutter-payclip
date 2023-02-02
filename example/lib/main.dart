@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
 
-import 'package:flutter/services.dart';
 import 'package:flutter_payclip/flutter_payclip.dart';
 
 void main() {
@@ -17,7 +16,6 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   String _platformVersion = 'Unknown';
-  final _flutterPayclipPlugin = FlutterPayclip();
 
   @override
   void initState() {
@@ -27,14 +25,20 @@ class _MyAppState extends State<MyApp> {
 
   // Platform messages are asynchronous, so we initialize in an async method.
   Future<void> initPlatformState() async {
-    String platformVersion;
+    String platformVersion = 'Failed to get platform version.';
     // Platform messages may fail, so we use a try/catch PlatformException.
     // We also handle the message potentially returning null.
-    try {
-      platformVersion =
-          await _flutterPayclipPlugin.getPlatformVersion() ?? 'Unknown platform version';
-    } on PlatformException {
-      platformVersion = 'Failed to get platform version.';
+    bool res = await FlutterPayclip.init();
+
+    if(res){
+      platformVersion = await FlutterPayclip.payment(
+        amount: 133.28, 
+        enableContactless: true, 
+        enableTips: true, 
+        roundTips: true, 
+        enablePayWithPoints: false, 
+        customTransactionId: "123123"
+      );
     }
 
     // If the widget was removed from the tree while the asynchronous platform
@@ -55,7 +59,7 @@ class _MyAppState extends State<MyApp> {
           title: const Text('Plugin example app'),
         ),
         body: Center(
-          child: Text('Running on: $_platformVersion\n'),
+          child: Text('RES: $_platformVersion\n'),
         ),
       ),
     );
