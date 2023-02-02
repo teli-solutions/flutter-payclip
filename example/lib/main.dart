@@ -68,7 +68,10 @@ class _MyAppState extends State<MyApp> {
                   color: Colors.orange[800],
                   textColor: Colors.white,
                   onPressed: () {
-                    FlutterPayClip.settings();
+                    FlutterPayClip.settings(
+                      loginEnabled: true, 
+                      logoutEnabled: true
+                    );
                   },
                   child: const Text('ABRIR AJUSTES'),
                 ),

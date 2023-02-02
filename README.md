@@ -53,7 +53,10 @@ Para poder desarrollar con el SDK de Pagos de Clip requieres:
 
 - **Inicialir sesion y conectar terminal**
 ```dart
-    bool result = await FlutterPayClip.settings();
+    bool result = await FlutterPayClip.settings(
+        loginEnabled: true, 
+        logoutEnabled: true
+    );
 ```
 
 - **Crear un nuevo pago**

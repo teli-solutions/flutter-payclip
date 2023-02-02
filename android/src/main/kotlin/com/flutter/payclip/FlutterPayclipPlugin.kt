@@ -50,8 +50,8 @@ class FlutterPayclipPlugin: FlutterPlugin, MethodCallHandler, ActivityAware, Plu
       "settings" -> {
         ClipApi.showSettingsActivity(
           activity, 
-          loginEnabled = false, 
-          logoutEnabled = false, 
+          loginEnabled = arguments["loginEnabled"] as Boolean, 
+          logoutEnabled = arguments["logoutEnabled"] as Boolean, 
           requestCode = REQUEST_CODE_SETTINGS
         )
       }

@@ -13,8 +13,14 @@ class FlutterPayClip {
     return await _channel.invokeMethod('init');
   }
 
-  static Future<bool> settings() async {
-    return await _channel.invokeMethod('settings');
+  static Future<bool> settings({
+    required bool loginEnabled,
+    required bool logoutEnabled,
+  }) async {
+    return await _channel.invokeMethod('settings', {
+      "loginEnabled": loginEnabled,
+      "logoutEnabled": logoutEnabled
+    });
   }
 
   static Future<String> payment({
