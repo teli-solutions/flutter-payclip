@@ -15,51 +15,82 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  String _platformVersion = 'Unknown';
+  //String _platformVersion = 'Unknown';
 
   @override
   void initState() {
     super.initState();
-    initPlatformState();
+    //initPlatformState();
   }
 
   // Platform messages are asynchronous, so we initialize in an async method.
-  Future<void> initPlatformState() async {
-    String platformVersion = 'Failed to get platform version.';
-    // Platform messages may fail, so we use a try/catch PlatformException.
-    // We also handle the message potentially returning null.
-    bool res = await FlutterPayClip.init();
+  // Future<void> initPlatformState() async {
+  //   //String platformVersion = 'Failed to get platform version.';
+  //   // Platform messages may fail, so we use a try/catch PlatformException.
+  //   // We also handle the message potentially returning null.
+  //   //bool res = await FlutterPayClip.init();
 
-    if(res){
-      platformVersion = await FlutterPayClip.payment(
-        amount: 133.28, 
-        enableContactless: true, 
-        enableTips: true, 
-        roundTips: true, 
-        enablePayWithPoints: false, 
-        customTransactionId: "123123"
-      );
-    }
+  //   // If the widget was removed from the tree while the asynchronous platform
+  //   // message was in flight, we want to discard the reply rather than calling
+  //   // setState to update our non-existent appearance.
+  //   //if (!mounted) return;
 
-    // If the widget was removed from the tree while the asynchronous platform
-    // message was in flight, we want to discard the reply rather than calling
-    // setState to update our non-existent appearance.
-    if (!mounted) return;
-
-    setState(() {
-      _platformVersion = platformVersion;
-    });
-  }
+  //   //setState(() {
+  //     //_platformVersion = platformVersion;
+  //   //});
+  // }
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
-          title: const Text('Plugin example app'),
+          backgroundColor: Colors.orange[800],
+          title: const Text('Ejemplo SDK Clip'),
         ),
         body: Center(
-          child: Text('RES: $_platformVersion\n'),
+          child: Padding(
+            padding: const EdgeInsets.all(20),
+            child: Column(
+              children: [
+                //Text('RES: $_platformVersion\n'),
+                MaterialButton(
+                  minWidth: double.infinity,
+                  color: Colors.orange[800],
+                  textColor: Colors.white,
+                  onPressed: () {
+                    FlutterPayClip.init();
+                  },
+                  child: const Text('INICIALIZAR'),
+                ),
+                MaterialButton(
+                  minWidth: double.infinity,
+                  color: Colors.orange[800],
+                  textColor: Colors.white,
+                  onPressed: () {
+                    FlutterPayClip.settings();
+                  },
+                  child: const Text('ABRIR AJUSTES'),
+                ),
+                MaterialButton(
+                  minWidth: double.infinity,
+                  color: Colors.orange[800],
+                  textColor: Colors.white,
+                  onPressed: () {
+                    FlutterPayClip.payment(
+                      amount: 5.00, 
+                      enableContactless: true, 
+                      enableTips: true, 
+                      roundTips: true, 
+                      enablePayWithPoints: false, 
+                      customTransactionId: "123123"
+                    );
+                  },
+                  child: const Text('CREAR PAGO'),
+                )
+              ],
+            ),
+          ),
         ),
       ),
     );
