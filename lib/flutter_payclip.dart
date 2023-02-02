@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/services.dart';
 
-class FlutterPayclip {
+class FlutterPayClip {
   static const MethodChannel _channel = MethodChannel('flutter_payclip');
 
   static Future<String> getPlatformVersion() async {

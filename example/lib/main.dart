@@ -28,10 +28,10 @@ class _MyAppState extends State<MyApp> {
     String platformVersion = 'Failed to get platform version.';
     // Platform messages may fail, so we use a try/catch PlatformException.
     // We also handle the message potentially returning null.
-    bool res = await FlutterPayclip.init();
+    bool res = await FlutterPayClip.init();
 
     if(res){
-      platformVersion = await FlutterPayclip.payment(
+      platformVersion = await FlutterPayClip.payment(
         amount: 133.28, 
         enableContactless: true, 
         enableTips: true, 
