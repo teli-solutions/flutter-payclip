@@ -17,10 +17,11 @@ import io.flutter.plugin.common.PluginRegistry
 import io.flutter.plugin.common.PluginRegistry.Registrar
 
 //! IMPORT CLIP LIBS
-import com.payclip.common.StatusCode
 import com.payclip.dspread.ClipPlusApi
 import com.payclip.paymentui.client.ClipApi
 import com.payclip.paymentui.models.ClipPayment
+import com.payclip.paymentui.client.LoginListener
+import com.payclip.authentication.client.LogoutListener
 import com.payclip.payments.models.transaction.ClipTransaction
 
 /** FlutterPayclipPlugin */
@@ -28,6 +29,7 @@ class FlutterPayclipPlugin: FlutterPlugin, MethodCallHandler, ActivityAware, Plu
   val REQUEST_CODE_PAYMENT = 42490
   val REQUEST_CODE_SETTINGS = 42491
 
+  private var sdkInitialized: Boolean = false;
   private lateinit var application: Application
   private lateinit var activity: Activity
   private lateinit var channel: MethodChannel
@@ -44,10 +46,63 @@ class FlutterPayclipPlugin: FlutterPlugin, MethodCallHandler, ActivityAware, Plu
 
     when(call.method){
       "init" -> {
-        ClipApi.init(application, ClipPlusApi())
+        if(!this.sdkInitialized){
+          this.sdkInitialized = true;
+          ClipApi.init(application, ClipPlusApi())
+        }
         r.success(true)
       }
+      "login" -> {
+        if(!this.sdkInitialized){
+          this.sdkInitialized = true;
+          ClipApi.init(application, ClipPlusApi())
+        }
+
+        val loginListener = object: LoginListener {
+          override fun onLoginFailed(statusCode: com.payclip.common.StatusCode.ClipError) {
+            r.success(true)
+          }
+
+          override fun onLoginSuccess() {
+            r.success(false)
+          }
+        }
+        
+        val arguments = call.arguments as HashMap<*, *>
+        ClipApi.login(arguments["email"] as String, arguments["password"] as String, loginListener)
+      }
+      "logout" -> {
+        if(!this.sdkInitialized){
+          this.sdkInitialized = true;
+          ClipApi.init(application, ClipPlusApi())
+        }
+
+        val logoutListener = object: LogoutListener {
+          override fun onLogoutSuccess() {
+            r.success(true)
+          }
+        Que
+          override fun onLogoutError(errorCode: com.payclip.common.StatusCode.ClipError) {
+            r.success(false)
+          }
+        }
+        ClipApi.logout(object: LogoutListener {
+          override fun onLogoutSuccess() {
+            r.success(true)
+          }
+        
+          override fun onLogoutError(errorCode: com.payclip.common.StatusCode.ClipError) {
+            r.success(false)
+          }
+        })
+      }
       "settings" -> {
+        if(!this.sdkInitialized){
+          this.sdkInitialized = true;
+          ClipApi.init(application, ClipPlusApi())
+        }
+
+        val arguments = call.arguments as HashMap<*, *>
         ClipApi.showSettingsActivity(
           activity, 
           loginEnabled = arguments["loginEnabled"] as Boolean, 
@@ -56,6 +111,11 @@ class FlutterPayclipPlugin: FlutterPlugin, MethodCallHandler, ActivityAware, Plu
         )
       }
       "payment" -> {
+        if(!this.sdkInitialized){
+          this.sdkInitialized = true;
+          ClipApi.init(application, ClipPlusApi())
+        }
+
         val arguments = call.arguments as HashMap<*, *>
         val clipPayment = ClipPayment.Builder()
           .amount(BigDecimal(arguments["amount"] as Double))
@@ -97,11 +157,20 @@ class FlutterPayclipPlugin: FlutterPlugin, MethodCallHandler, ActivityAware, Plu
     //activity = null
   }
 
-  override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?): Boolean {
+  override fun onActivityResult(requestCode: Int, resultCode: Int, intent: Intent?): Boolean {
     when(requestCode){
       REQUEST_CODE_PAYMENT -> {
-        this.result.success("CODE: ${data?.getIntExtra(StatusCode.RESULT_CODE, StatusCode.FAILURE)} ${resultCode}")
-        return true
+        val intent_data = intent?.toUri(0)
+        val result_code = intent?.getIntExtra("clip_result_code", 0)
+        val result_error = intent?.getIntExtra("clip_result_error", 0)
+        
+        if(result_code == -1){
+          this.result.success(result_code)
+          return true
+        }
+        
+        this.result.success(result_error)
+        return false
       }
       REQUEST_CODE_SETTINGS -> {
         if(resultCode == -1){

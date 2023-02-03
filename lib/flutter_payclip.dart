@@ -5,12 +5,22 @@ import 'package:flutter/services.dart';
 class FlutterPayClip {
   static const MethodChannel _channel = MethodChannel('flutter_payclip');
 
-  static Future<String> getPlatformVersion() async {
-    return await _channel.invokeMethod('getPlatformVersion');
-  }
-
   static Future<bool> init() async {
     return await _channel.invokeMethod('init');
+  }
+
+  static Future<bool> login({
+    required String email,
+    required String password,
+  }) async {
+    return await _channel.invokeMethod('login', {
+      "email": email,
+      "password": password
+    });
+  }
+
+  static Future<bool> logout() async {
+    return await _channel.invokeMethod('logout');
   }
 
   static Future<bool> settings({
@@ -23,7 +33,7 @@ class FlutterPayClip {
     });
   }
 
-  static Future<String> payment({
+  static Future<int> payment({
     required double amount,
     required bool enableContactless,
     required bool enableTips,
