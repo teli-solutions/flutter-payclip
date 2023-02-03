@@ -11,13 +11,9 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return const MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'QuickAlert Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: const MyHomePage(),
+      home: MyHomePage(),
     );
   }
 }
@@ -30,6 +26,9 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  final _email = TextEditingController(text: '');
+  final _password = TextEditingController(text: '');
+
   @override
   void initState() {
     super.initState();
@@ -40,7 +39,7 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.orange[800],
-        title: const Text('Ejemplo SDK Clip'),
+        title: const Text('SDK Clip'),
       ),
       body: Center(
         child: Padding(
@@ -62,12 +61,31 @@ class _MyHomePageState extends State<MyHomePage> {
                 },
                 child: const Text('INICIALIZAR'),
               ),
+              const SizedBox(height: 30),
+              TextFormField(
+                controller: _email,
+                keyboardType: TextInputType.emailAddress,
+                textInputAction: TextInputAction.continueAction,
+                decoration: const InputDecoration(
+                  labelText: 'Email',
+                ),
+              ),
+              TextFormField(
+                controller: _password,
+                keyboardType: TextInputType.visiblePassword,
+                textInputAction: TextInputAction.go,
+                obscureText: true,
+                decoration: const InputDecoration(
+                  labelText: 'Contraseña',
+                ),
+              ),
+              const SizedBox(height: 10),
               MaterialButton(
                 minWidth: double.infinity,
                 color: Colors.orange[800],
                 textColor: Colors.white,
                 onPressed: () {
-                  FlutterPayClip.login(email: "brenda_laflakita@hotmail.com", password: "Prensa1811;_").then((response) => {
+                  FlutterPayClip.login(email: _email.text, password: _password.text).then((response) => {
                     if (response){
                       QuickAlert.show(
                         context: context,
@@ -112,6 +130,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 },
                 child: const Text('CERRAR SESION'),
               ),
+              const SizedBox(height: 30),
               MaterialButton(
                 minWidth: double.infinity,
                 color: Colors.orange[800],

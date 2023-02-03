@@ -60,11 +60,11 @@ class FlutterPayclipPlugin: FlutterPlugin, MethodCallHandler, ActivityAware, Plu
 
         val loginListener = object: LoginListener {
           override fun onLoginFailed(statusCode: com.payclip.common.StatusCode.ClipError) {
-            r.success(true)
+            r.success(false)
           }
 
           override fun onLoginSuccess() {
-            r.success(false)
+            r.success(true)
           }
         }
         
@@ -81,20 +81,12 @@ class FlutterPayclipPlugin: FlutterPlugin, MethodCallHandler, ActivityAware, Plu
           override fun onLogoutSuccess() {
             r.success(true)
           }
-        Que
           override fun onLogoutError(errorCode: com.payclip.common.StatusCode.ClipError) {
             r.success(false)
           }
         }
-        ClipApi.logout(object: LogoutListener {
-          override fun onLogoutSuccess() {
-            r.success(true)
-          }
-        
-          override fun onLogoutError(errorCode: com.payclip.common.StatusCode.ClipError) {
-            r.success(false)
-          }
-        })
+
+        ClipApi.logout(logoutListener)
       }
       "settings" -> {
         if(!this.sdkInitialized){
