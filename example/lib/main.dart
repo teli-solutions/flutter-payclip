@@ -26,11 +26,13 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  final FlutterPayClip payclip = FlutterPayClip();
   final _email = TextEditingController(text: '');
   final _password = TextEditingController(text: '');
 
   @override
   void initState() {
+    payclip.init();
     super.initState();
   }
 
@@ -46,22 +48,6 @@ class _MyHomePageState extends State<MyHomePage> {
           padding: const EdgeInsets.all(20),
           child: ListView(
             children: [
-              MaterialButton(
-                minWidth: double.infinity,
-                color: Colors.orange[800],
-                textColor: Colors.white,
-                onPressed: () {
-                  FlutterPayClip.init();
-                  QuickAlert.show(
-                    context: context,
-                    type: QuickAlertType.success,
-                    text: 'SDK inicializado',
-                    autoCloseDuration: const Duration(seconds: 5),
-                  );
-                },
-                child: const Text('INICIALIZAR'),
-              ),
-              const SizedBox(height: 30),
               TextFormField(
                 controller: _email,
                 keyboardType: TextInputType.emailAddress,
@@ -83,7 +69,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 color: Colors.orange[800],
                 textColor: Colors.white,
                 onPressed: () {
-                  FlutterPayClip.login(email: _email.text, password: _password.text).then((response) => {
+                  payclip.login(email: _email.text, password: _password.text).then((response) => {
                     if (response){
                       QuickAlert.show(
                         context: context,
@@ -108,7 +94,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 color: Colors.orange[800],
                 textColor: Colors.white,
                 onPressed: () {
-                  FlutterPayClip.logout().then((success) => {
+                  payclip.logout().then((success) => {
                     if(success){
                       QuickAlert.show(
                         context: context,
@@ -134,7 +120,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 color: Colors.orange[800],
                 textColor: Colors.white,
                 onPressed: () {
-                  FlutterPayClip.settings(
+                  payclip.settings(
                       loginEnabled: false, logoutEnabled: false);
                 },
                 child: const Text('ABRIR AJUSTES'),
@@ -144,7 +130,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 color: Colors.orange[800],
                 textColor: Colors.white,
                 onPressed: () {
-                  FlutterPayClip.payment(
+                  payclip.payment(
                           amount: 1.00,
                           enableContactless: true,
                           enableTips: true,
