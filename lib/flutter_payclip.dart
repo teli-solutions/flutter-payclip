@@ -1,15 +1,14 @@
 import 'dart:async';
-
 import 'package:flutter/services.dart';
 
 class FlutterPayClip {
   static const MethodChannel _channel = MethodChannel('flutter_payclip');
 
-  static Future<bool> init() async {
+  Future<bool> init() async {
     return await _channel.invokeMethod('init');
   }
 
-  static Future<bool> login({
+  Future<bool> login({
     required String email,
     required String password,
   }) async {
@@ -19,11 +18,11 @@ class FlutterPayClip {
     });
   }
 
-  static Future<bool> logout() async {
+  Future<bool> logout() async {
     return await _channel.invokeMethod('logout');
   }
 
-  static Future<bool> settings({
+  Future<bool> settings({
     required bool loginEnabled,
     required bool logoutEnabled,
   }) async {
@@ -33,7 +32,7 @@ class FlutterPayClip {
     });
   }
 
-  static Future<int> payment({
+  Future<int> payment({
     required double amount,
     required bool enableContactless,
     required bool enableTips,
