@@ -1,8 +1,53 @@
+import 'dart:async';
 
-import 'flutter_payclip_platform_interface.dart';
+import 'package:flutter/services.dart';
 
-class FlutterPayclip {
-  Future<String?> getPlatformVersion() {
-    return FlutterPayclipPlatform.instance.getPlatformVersion();
+class FlutterPayClip {
+  static const MethodChannel _channel = MethodChannel('flutter_payclip');
+
+  static Future<bool> init() async {
+    return await _channel.invokeMethod('init');
+  }
+
+  static Future<bool> login({
+    required String email,
+    required String password,
+  }) async {
+    return await _channel.invokeMethod('login', {
+      "email": email,
+      "password": password
+    });
+  }
+
+  static Future<bool> logout() async {
+    return await _channel.invokeMethod('logout');
+  }
+
+  static Future<bool> settings({
+    required bool loginEnabled,
+    required bool logoutEnabled,
+  }) async {
+    return await _channel.invokeMethod('settings', {
+      "loginEnabled": loginEnabled,
+      "logoutEnabled": logoutEnabled
+    });
+  }
+
+  static Future<int> payment({
+    required double amount,
+    required bool enableContactless,
+    required bool enableTips,
+    required bool roundTips,
+    required bool enablePayWithPoints,
+    required String customTransactionId
+  }) async {
+    return await _channel.invokeMethod('payment', {
+      "amount": amount,
+      "enableContactless": enableContactless,
+      "enableTips": enableTips,
+      "roundTips": roundTips,
+      "enablePayWithPoints": enablePayWithPoints,
+      "customTransactionId": customTransactionId
+    });
   }
 }

@@ -39,6 +39,6 @@ android {
 }
 
 dependencies {
-    implementation 'com.payclip.sdk:payment-ui:2.2.2'
-    implementation 'com.payclip.sdk:plus-reader:1.2.0'
+    implementation 'com.payclip.sdk:payment-ui:2.8.0'
+    implementation 'com.payclip.sdk:plus-reader:1.3.0'
 }

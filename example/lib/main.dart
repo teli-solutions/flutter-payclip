@@ -1,61 +1,155 @@
 import 'package:flutter/material.dart';
-import 'dart:async';
-
-import 'package:flutter/services.dart';
+import 'package:quickalert/quickalert.dart';
 import 'package:flutter_payclip/flutter_payclip.dart';
 
 void main() {
   runApp(const MyApp());
 }
 
-class MyApp extends StatefulWidget {
-  const MyApp({super.key});
-
-  @override
-  State<MyApp> createState() => _MyAppState();
-}
-
-class _MyAppState extends State<MyApp> {
-  String _platformVersion = 'Unknown';
-  final _flutterPayclipPlugin = FlutterPayclip();
-
-  @override
-  void initState() {
-    super.initState();
-    initPlatformState();
-  }
-
-  // Platform messages are asynchronous, so we initialize in an async method.
-  Future<void> initPlatformState() async {
-    String platformVersion;
-    // Platform messages may fail, so we use a try/catch PlatformException.
-    // We also handle the message potentially returning null.
-    try {
-      platformVersion =
-          await _flutterPayclipPlugin.getPlatformVersion() ?? 'Unknown platform version';
-    } on PlatformException {
-      platformVersion = 'Failed to get platform version.';
-    }
-
-    // If the widget was removed from the tree while the asynchronous platform
-    // message was in flight, we want to discard the reply rather than calling
-    // setState to update our non-existent appearance.
-    if (!mounted) return;
-
-    setState(() {
-      _platformVersion = platformVersion;
-    });
-  }
+class MyApp extends StatelessWidget {
+  const MyApp({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: Scaffold(
-        appBar: AppBar(
-          title: const Text('Plugin example app'),
-        ),
-        body: Center(
-          child: Text('Running on: $_platformVersion\n'),
+      debugShowCheckedModeBanner: false,
+      title: 'QuickAlert Demo',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      home: const MyHomePage(),
+    );
+  }
+}
+
+class MyHomePage extends StatefulWidget {
+  const MyHomePage({Key? key}) : super(key: key);
+
+  @override
+  State<MyHomePage> createState() => _MyHomePageState();
+}
+
+class _MyHomePageState extends State<MyHomePage> {
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.orange[800],
+        title: const Text('Ejemplo SDK Clip'),
+      ),
+      body: Center(
+        child: Padding(
+          padding: const EdgeInsets.all(20),
+          child: Column(
+            children: [
+              MaterialButton(
+                minWidth: double.infinity,
+                color: Colors.orange[800],
+                textColor: Colors.white,
+                onPressed: () {
+                  FlutterPayClip.init();
+                  QuickAlert.show(
+                    context: context,
+                    type: QuickAlertType.success,
+                    text: 'SDK inicializado',
+                    autoCloseDuration: const Duration(seconds: 5),
+                  );
+                },
+                child: const Text('INICIALIZAR'),
+              ),
+              MaterialButton(
+                minWidth: double.infinity,
+                color: Colors.orange[800],
+                textColor: Colors.white,
+                onPressed: () {
+                  FlutterPayClip.login(email: "brenda_laflakita@hotmail.com", password: "Prensa1811;_").then((response) => {
+                    if (response){
+                      QuickAlert.show(
+                        context: context,
+                        type: QuickAlertType.success,
+                        text: 'Sesion Iniciada',
+                        autoCloseDuration: const Duration(seconds: 2),
+                      )
+                    }else{
+                      QuickAlert.show(
+                        context: context,
+                        type: QuickAlertType.success,
+                        text: 'Ocurrio un error al iniciar la sesion',
+                        autoCloseDuration: const Duration(seconds: 2),
+                      )
+                    }
+                  });
+                },
+                child: const Text('INICIAR SESION'),
+              ),
+              MaterialButton(
+                minWidth: double.infinity,
+                color: Colors.orange[800],
+                textColor: Colors.white,
+                onPressed: () {
+                  FlutterPayClip.logout().then((success) => {
+                    if(success){
+                      QuickAlert.show(
+                        context: context,
+                        type: QuickAlertType.success,
+                        text: 'Sesion Cerrada',
+                        autoCloseDuration: const Duration(seconds: 5),
+                      )
+                    }else{
+                      QuickAlert.show(
+                        context: context,
+                        type: QuickAlertType.error,
+                        text: 'Ocurrio un error al cerrar la sesion',
+                        autoCloseDuration: const Duration(seconds: 5),
+                      )
+                    }
+                  });
+                },
+                child: const Text('CERRAR SESION'),
+              ),
+              MaterialButton(
+                minWidth: double.infinity,
+                color: Colors.orange[800],
+                textColor: Colors.white,
+                onPressed: () {
+                  FlutterPayClip.settings(
+                      loginEnabled: false, logoutEnabled: false);
+                },
+                child: const Text('ABRIR AJUSTES'),
+              ),
+              MaterialButton(
+                minWidth: double.infinity,
+                color: Colors.orange[800],
+                textColor: Colors.white,
+                onPressed: () {
+                  FlutterPayClip.payment(
+                          amount: 1.00,
+                          enableContactless: true,
+                          enableTips: true,
+                          roundTips: true,
+                          enablePayWithPoints: false,
+                          customTransactionId: "123123")
+                      .then((response) => {
+                            if (response == -1)
+                              {
+                                QuickAlert.show(
+                                  context: context,
+                                  type: QuickAlertType.success,
+                                  text: 'Cobro realizado exitosamente',
+                                  autoCloseDuration: const Duration(seconds: 2),
+                                )
+                              }
+                          });
+                },
+                child: const Text('CREAR PAGO'),
+              )
+            ],
+          ),
         ),
       ),
     );

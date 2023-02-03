@@ -16,6 +16,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  quickalert: ^1.0.1
+  cool_alert: ^1.1.0
 
   flutter_payclip:
     # When depending on this package from a real application you should use:
