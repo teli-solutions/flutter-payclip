@@ -46,27 +46,38 @@ Para poder desarrollar con el SDK de Pagos de Clip requieres:
 
 ## Uso
 
+Start by adding the library as a dependency to your project.
+```yaml
+dependencies:
+  flutter_payclip: <latest version>
+```
+
+Importar
+```dart
+import 'package:flutter_payclip/flutter_payclip.dart';
+```
+
 - **Initilize the SDK**
 ```dart
-    bool result = await FlutterPayClip.init();
+bool result = await FlutterPayClip.init();
 ```
 
 - **Inicialir sesion y conectar terminal**
 ```dart
-    bool result = await FlutterPayClip.settings(
-        loginEnabled: true, 
-        logoutEnabled: true
-    );
+bool result = await FlutterPayClip.settings(
+  loginEnabled: true, 
+  logoutEnabled: true
+);
 ```
 
 - **Crear un nuevo pago**
 ```dart
-    int result = await FlutterPayClip.payment(
-        amount: 133.28, 
-        enableContactless: true, 
-        enableTips: true, 
-        roundTips: true, 
-        enablePayWithPoints: false, 
-        customTransactionId: "123123"
-    );
+int result = await FlutterPayClip.payment(
+  amount: 133.28, 
+  enableContactless: true, 
+  enableTips: true, 
+  roundTips: true, 
+  enablePayWithPoints: false, 
+  customTransactionId: "123123"
+);
 ```
