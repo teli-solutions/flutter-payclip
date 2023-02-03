@@ -2,7 +2,7 @@ name: flutter_payclip
 description: El SDK de Clip es una librería que extiende las capacidades de tu aplicación de punto de venta.
 repository: https://github.com/teli-solutions/flutter-payclip
 issue_tracker: https://github.com/teli-solutions/flutter-payclip/issues
-version: 1.0.2
+version: 1.0.3
 
 environment:
   sdk: '>=2.19.0 <3.0.0'
