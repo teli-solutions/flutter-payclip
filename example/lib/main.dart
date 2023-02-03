@@ -44,7 +44,7 @@ class _MyHomePageState extends State<MyHomePage> {
       body: Center(
         child: Padding(
           padding: const EdgeInsets.all(20),
-          child: Column(
+          child: ListView(
             children: [
               MaterialButton(
                 minWidth: double.infinity,
@@ -65,7 +65,6 @@ class _MyHomePageState extends State<MyHomePage> {
               TextFormField(
                 controller: _email,
                 keyboardType: TextInputType.emailAddress,
-                textInputAction: TextInputAction.continueAction,
                 decoration: const InputDecoration(
                   labelText: 'Email',
                 ),
@@ -73,7 +72,6 @@ class _MyHomePageState extends State<MyHomePage> {
               TextFormField(
                 controller: _password,
                 keyboardType: TextInputType.visiblePassword,
-                textInputAction: TextInputAction.go,
                 obscureText: true,
                 decoration: const InputDecoration(
                   labelText: 'Contraseña',
